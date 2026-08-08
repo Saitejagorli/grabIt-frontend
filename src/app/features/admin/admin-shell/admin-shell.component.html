@@ -1,0 +1,54 @@
+<div class="flex h-screen overflow-hidden">
+  <p-drawer
+    [(visible)]="isDrawerOpen"
+    [modal]="isMobile()"
+    [closable]="isMobile()"
+    styleClass="!w-64"
+  >
+    <ng-template pTemplate="header">
+      <div class="flex items-center gap-2">
+        <svg [lucideIcon]="'shopping-bag'" [size]="24" class="text-primary-500"></svg>
+        <h2 class="text-lg font-extrabold">grabIt Admin</h2>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+      <p-panel-menu [model]="items" [dt]="panelMenuTokens">
+        <ng-template #item let-item>
+          <div
+            class="flex items-center gap-2 px-4 py-2 hover:cursor-pointer hover:text-primary-500 hover:font-bold rounded-lg"
+            (click)="closeOnMobile()"
+          >
+            <svg [lucideIcon]="item.icon"></svg>
+            <h2>{{ item.label }}</h2>
+          </div>
+        </ng-template>
+      </p-panel-menu>
+    </ng-template>
+  </p-drawer>
+
+  <div
+    class="flex-1 flex flex-col transition-all duration-300 px-4 overflow-y-auto"
+    [ngClass]="{ 'lg:ml-64': isDrawerOpen() }"
+  >
+    <div class="flex items-center gap-2 py-2">
+      <button
+        type="button"
+        class="lg:hidden p-2 -ml-2 rounded-md hover:bg-gray-100"
+        (click)="toggleDrawer()"
+        aria-label="Toggle navigation menu"
+      >
+        <svg [lucideIcon]="'menu'" [size]="20"></svg>
+      </button>
+
+      <p-breadcrumb [model]="breadcrumbItems" [dt]="breadCrumbTokens">
+        <ng-template #item let-item let-index="index">
+          <p class="text-gray-500 text-sm">{{ item.label }}</p>
+        </ng-template>
+        <ng-template #separator> / </ng-template>
+      </p-breadcrumb>
+    </div>
+    <div class="mb-6">
+        <router-outlet />
+    </div>
+  </div>
+</div>

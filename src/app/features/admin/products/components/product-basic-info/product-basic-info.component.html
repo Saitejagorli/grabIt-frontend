@@ -1,0 +1,56 @@
+<p-card>
+    <ng-template #header>
+        <div class="flex align-items-center px-4 py-4 gap-2">
+            <svg lucideFileText class="text-primary-500"></svg>
+            <h2 class="font-bold">Basic Information</h2>
+        </div>
+    </ng-template>
+    <form [formGroup]="basicInfo()">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-2">
+                <label for="productName">Product Name <span class="text-red-500">*</span></label>
+                <input type="text" pInputText id="productName" formControlName="name" placeholder="e.g. Nike Air Max" />
+                <app-field-error [control]="getControl('name')" label="Product Name"></app-field-error>
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="sku">SKU (Stock Keeping Unit) <span class="text-red-500">*</span></label>
+                @if(mode() === 'create') {
+                    <input type="text" pInputText id="sku" formControlName="sku" (blur)="toUpperCase(getControl('sku'))" />
+                    <app-field-error [control]="getControl('sku')" label="SKU"></app-field-error>
+                }
+                @else {
+                    <input type="text" pInputText id="sku" formControlName="sku" [readonly]="true" class="!bg-gray-100" />
+                }
+
+            </div>
+            <div class="flex flex-col gap-2 col-span-1 sm:col-span-2">
+                <label for="description">Description <span class="text-red-500">*</span></label>
+                <textarea pInputTextarea id="description" formControlName="description" rows="3"
+                    style="resize: none;"></textarea>
+                <app-field-error [control]="getControl('description')" label="Description"></app-field-error>
+            </div>
+            <div class="col-span-1 sm:col-span-2">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="flex flex-col gap-2">
+                        <label for="brand">Brand <span class="text-red-500">*</span></label>
+                        <p-select id="brand" formControlName="brand" [options]="brands" optionLabel="name"
+                            optionValue="id" placeholder="Select brand" class="w-full" />
+                        <app-field-error [control]="getControl('brand')" label="Brand"></app-field-error>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label for="category">Category <span class="text-red-500">*</span></label>
+                        <p-select id="category" formControlName="category" [options]="categories" optionLabel="name"
+                            optionValue="id" placeholder="Select category" class="w-full" />
+                        <app-field-error [control]="getControl('category')" label="Category"></app-field-error>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label for="subcategory">Subcategory <span class="text-red-500">*</span></label>
+                        <p-select id="subcategory" formControlName="subcategory" [options]="subcategories"
+                            optionLabel="name" optionValue="id" placeholder="Select subcategory" class="w-full" />
+                        <app-field-error [control]="getControl('subcategory')" label="Subcategory"></app-field-error>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</p-card>

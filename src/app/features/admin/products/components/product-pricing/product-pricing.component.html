@@ -1,0 +1,29 @@
+<p-card>
+    <ng-template #header>
+        <div class="flex align-items-center px-4 py-4 gap-2">
+            <svg lucideTag class="text-primary-500"></svg>
+            <h2 class="font-bold">Pricing Information</h2>
+        </div>
+    </ng-template>
+    <ng-template #content>
+        <div [formGroup]="priceInfo()" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-2">
+                <label>MRP (Maximum Retail Price) <span class="text-red-500">*</span></label>
+                <p-inputgroup>
+                    <p-inputgroup-addon styleClass="!bg-gray-50 !font-extrabold">₹</p-inputgroup-addon>
+                    <p-inputnumber formControlName="mrp" placeholder="0.00" class="w-full" />
+                </p-inputgroup>
+                <app-field-error [control]="getControl('mrp')" label="MRP"></app-field-error>
+            </div>
+            <div class="flex flex-col gap-2">
+                <label>Selling Price <span class="text-red-500">*</span></label>
+                <p-inputgroup>
+                    <p-inputgroup-addon styleClass="!bg-gray-50 !font-extrabold">₹</p-inputgroup-addon>
+                    <p-inputnumber formControlName="sellingPrice" placeholder="0.00" class="w-full" />
+                </p-inputgroup>
+                <app-field-error [groupControl]="priceInfo()" [control]="getControl('sellingPrice')" label="Selling Price"></app-field-error>
+                
+            </div>
+        </div>
+    </ng-template>
+</p-card>

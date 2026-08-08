@@ -1,0 +1,90 @@
+<p-card styleClass="h-full">
+    <ng-template #header>
+        <div class="flex align-items-center px-4 pt-4 gap-2">
+            <svg lucideImage class="text-primary-500"></svg>
+            <h2 class="font-bold">Product Images</h2>
+        </div>
+    </ng-template>
+    <ng-template #content>
+        <div>
+            @if(images().length > 0) {
+            <div class="relative w-full h-64 p-4 border border-gray-300 rounded-lg overflow-hidden">
+                <img [src]="getImageUrl(0)" alt="Selected Image" class="w-full h-full object-contain" />
+                <div class="flex gap-1 items-center absolute bottom-3 right-3 bg-primary-50 p-1 rounded shadow-sm">
+                    <svg lucideImage class="text-primary-500 h-5"></svg>
+                    <button type="button" (click)="mainImageInput.click();">
+                        Browse
+                    </button>
+                </div>
+                <input type="file" #mainImageInput class="hidden" accept="image/jpeg, image/png, image/jpg"
+                    (change)="onMainImageChange($event)" />
+            </div>
+            }
+            @else {
+            <div class="w-full h-64 flex flex-col items-center justify-center p-4 gap-2 border-2 border-dashed rounded-lg cursor-pointer transition-colors"
+                [ngClass]="{
+                        'border-primary-500 bg-primary-100 scale-[1.01]': isDragging,
+                        'border-primary-300 bg-primary-50 hover:bg-primary-100': !isDragging
+                        }" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+
+                <!-- Cloud Icon -->
+                <svg lucideCloudUpload class="text-primary-500 w-10 h-10 pointer-events-none"></svg>
+
+                <!-- Title & Subtitle -->
+                <div class="text-center pointer-events-none">
+                    <h3 class="font-semibold text-gray-800 m-0 text-base">Drag & drop images here</h3>
+                    <p>or</p>
+                </div>
+
+                <!-- Choose Files Button -->
+                <button type="button"
+                    class="px-4 py-2 mb-2 bg-primary-500 text-white text-sm font-medium rounded-md shadow-sm hover:bg-primary-600 transition-colors cursor-pointer"
+                    (click)="$event.stopPropagation(); fileInput.click()">
+                    Choose Files
+                </button>
+                <p class="text-xs text-gray-500">Allowed file types: JPG, PNG, JPEG, Max size: 2MB each</p>
+            </div>
+            }
+            <!-- Hidden Native File Input -->
+            <input #fileInput type="file" class="hidden" accept="image/jpeg, image/png, image/jpg" multiple
+                (change)="onFileSelect($event)" />
+        </div>
+        <div class="flex gap-4 flex-wrap mt-4">
+            @for (file of images().value; track $index;let i=$index) {
+            @if(i!==0){
+            <div class="relative inline-block border border-gray-200 rounded p-2  bg-gray-50">
+                <!-- Image -->
+                <img [src]="getImageUrl(i)" alt="Selected Image" class="w-20 h-20 object-cover" />
+
+                <!-- Semi-Transparent Dark Close Badge -->
+                <button type="button" (click)="removeFile($index)"
+                    class="absolute top-1 right-1 w-6 h-6 bg-slate-500/80 hover:bg-slate-700 text-white rounded-full flex items-center justify-center cursor-pointer transition-colors"
+                    title="Remove image">
+                    <i class="pi pi-times text-[10px]"></i>
+                </button>
+            </div>
+            }
+            }
+            @if(images().length > 0){
+            <div class="flex justify-center items-center w-24 h-24 bg-gray-50 rounded p-2 border-2 border-dashed border-primary-500"
+                (click)="$event.stopPropagation(); fileInput.click()">
+                <div
+                    class="flex flex-col items-center justify-center gap-1 font-bold text-gray-500 cursor-pointer hover:text-gray-700 transition-colors">
+                    <div class="flex items-center justify-center w-4 h-4 bg-primary-500 rounded-full">
+                        <svg lucidePlus class="text-white"></svg>
+                    </div>
+                    <p class="text-xs text-primary-500">Add more</p>
+                </div>
+            </div>
+            }
+        </div>
+        <div class="flex flex-col gap-0.5 mt-2">
+            <small class="text-red-500 text-xs flex items-center gap-1">
+                @if (errorMessage) {
+                <i class="pi pi-exclamation-circle text-xs"></i>
+                {{ errorMessage }}
+                }
+            </small>
+        </div>
+    </ng-template>
+</p-card>

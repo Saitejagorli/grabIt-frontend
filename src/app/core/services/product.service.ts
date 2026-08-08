@@ -1,0 +1,40 @@
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
+import { ApiResponse } from '../../shared/models/api-responose.model';
+import { Product } from '../../shared/models/product.model';
+import { environment } from '../../../environments/environment';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ProductService {
+  private readonly http = inject(HttpClient);
+
+  private readonly apiUrl = `${environment.PRODUCT_SERVICE_BASE_URL}/products`;
+
+  createProduct(request: Product): Observable<ApiResponse<Product>> {
+    return this.http.post<ApiResponse<Product>>(this.apiUrl, request);
+  }
+
+  updateProduct(
+    productId: string,
+    request: Product,
+  ): Observable<ApiResponse<Product>> {
+    return this.http.put<ApiResponse<Product>>(
+      `${this.apiUrl}/${productId}`,
+      request,
+    );
+  }
+
+  getProductById(productId: string): Observable<ApiResponse<Product>> {
+    return this.http.get<ApiResponse<Product>>(`${this.apiUrl}/${productId}`);
+  }
+
+  checkSkuExists(sku: string): Observable<ApiResponse<{ exists: boolean }>> {
+    return this.http.get<ApiResponse<{ exists: boolean }>>(
+      `${this.apiUrl}/check-sku/${sku}`,
+    );
+  }
+}

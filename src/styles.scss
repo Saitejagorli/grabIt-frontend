@@ -1,0 +1,33 @@
+@use "tailwindcss";
+@plugin "tailwindcss-primeui";
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;500;700&display=swap');
+@import "primeicons/primeicons.css";
+
+
+/* Global box sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--p-surface-50);
+  color: var(--p-text-color);
+  font-family: 'Lato', sans-serif;
+}
+
+/* Form controls inherit application typography */
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
