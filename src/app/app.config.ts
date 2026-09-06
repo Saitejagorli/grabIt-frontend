@@ -57,7 +57,8 @@ export const appConfig: ApplicationConfig = {
       LucideChartSpline,
       LucideSettings,
       LucideLogOut,
-      LucideChevronRight
+      LucideChevronRight,
+      LucideMegaphone
     ),
   ],
 };

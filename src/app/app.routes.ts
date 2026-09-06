@@ -9,14 +9,21 @@ export const routes: Routes = [
       ),
     children: [
       {
+        path: 'products',
+        loadComponent: () =>
+          import('./features/admin/products/pages/products-list/products-list.component').then(
+            (m) => m.ProductsListComponent,
+          ),
+      },
+      {
         path: 'products/add',
         loadComponent: () =>
           import('./features/admin/products/pages/product-form/product-form.component').then(
             (m) => m.ProductFormComponent,
           ),
-        data:{
-          mode:'create'
-        }
+        data: {
+          mode: 'create',
+        },
       },
       {
         path: 'products/:id',
@@ -24,9 +31,9 @@ export const routes: Routes = [
           import('./features/admin/products/pages/product-form/product-form.component').then(
             (m) => m.ProductFormComponent,
           ),
-        data:{
-          mode:'edit'
-        }
+        data: {
+          mode: 'edit',
+        },
       },
     ],
   },

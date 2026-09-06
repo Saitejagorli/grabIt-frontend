@@ -1,6 +1,6 @@
 import { ImageFile, UploadedImage } from './media.model';
 
-interface ProductBase{
+interface ProductBase {
   id: string;
   name: string;
   description: string;
@@ -35,3 +35,20 @@ export enum ProductVisibility {
 }
 
 export type ProductImage = ImageFile | UploadedImage;
+
+export interface ProductListItem extends Omit<
+  ProductBase,
+  'brandId' | 'categoryId' | 'subCategoryId'
+> {
+  brandName: string;
+  categoryName: string;
+  thumnailImage: string;
+  updatedAt: string;
+}
+
+export interface ProductList{
+  content: ProductListItem[];
+  pageNumber: number;
+  pageSize: number;
+  totalRecords: number;
+}

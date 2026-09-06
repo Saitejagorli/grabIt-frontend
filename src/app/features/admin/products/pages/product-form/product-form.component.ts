@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   inject,
   input,
   OnInit,
@@ -17,7 +18,16 @@ import {
 
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { finalize, forkJoin, map, Observable, of, switchMap } from 'rxjs';
+import {
+  finalize,
+  forkJoin,
+  map,
+  Observable,
+  of,
+  switchMap,
+  take,
+  timer,
+} from 'rxjs';
 
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -48,6 +58,7 @@ import {
 
 import { priceValidator } from '../../validators/price.validator';
 import { skuExistsValidator } from '../../validators/sku-exists.validator';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 type ProductMode = 'create' | 'edit';
 @Component({
@@ -67,6 +78,7 @@ type ProductMode = 'create' | 'edit';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductFormComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(NonNullableFormBuilder);
 
   private readonly messageService = inject(MessageService);
@@ -250,9 +262,11 @@ export class ProductFormComponent implements OnInit {
             life: 2000,
           });
 
-          setTimeout(() => {
-            this.router.navigate(['/admin/products', response.data?.id]);
-          }, 2000);
+          timer(2000)
+            .pipe(take(1), takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => {
+              this.router.navigate(['/admin/products', response.data?.id]);
+            });
         },
 
         error: (error) => {

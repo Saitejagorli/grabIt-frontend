@@ -2,9 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { ApiResponse } from '../../shared/models/api-responose.model';
-import { Product, ProductRequest } from '../../shared/models/product.model';
 import { environment } from '../../../environments/environment';
+import { ApiResponse } from '../../shared/models/api-response.model';
+import {
+  Product,
+  ProductList,
+  ProductRequest,
+} from '../../shared/models/product.model';
 
 @Injectable({
   providedIn: 'root',
@@ -36,5 +40,14 @@ export class ProductService {
     return this.http.get<ApiResponse<{ exists: boolean }>>(
       `${this.apiUrl}/check-sku/${sku}`,
     );
+  }
+
+  getProductsList(page = 0, size = 10): Observable<ApiResponse<ProductList>> {
+    return this.http.get<ApiResponse<ProductList>>(this.apiUrl, {
+      params: {
+        page: page.toString(),
+        size: size.toString(),
+      },
+    });
   }
 }
