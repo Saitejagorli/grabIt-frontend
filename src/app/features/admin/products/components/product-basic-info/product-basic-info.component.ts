@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  inject,
+  input,
+  OnInit,
+} from '@angular/core';
 import {
   AbstractControl,
   FormGroup,
@@ -41,8 +49,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductBasicInfoComponent implements OnInit {
-
   destroyRef = inject(DestroyRef);
+  private cdr = inject(ChangeDetectorRef);
 
   brandService = inject(BrandService);
   categoryService = inject(CategoryService);
@@ -108,8 +116,10 @@ export class ProductBasicInfoComponent implements OnInit {
     categoryControl?.valueChanges
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        tap(()=>{
-          this.basicInfo().get('subcategory')?.setValue(null, { emitEvent: false });
+        tap(() => {
+          this.basicInfo()
+            .get('subcategory')
+            ?.setValue(null, { emitEvent: false });
         }),
         startWith(categoryControl.value),
         filter((categoryId): categoryId is string => !!categoryId),
@@ -121,6 +131,7 @@ export class ProductBasicInfoComponent implements OnInit {
         next: (response) => {
           if (response.success) {
             this.subcategories = response.data ?? [];
+            this.cdr.markForCheck();
           } else {
             console.error('Failed to load subcategories:', response.message);
           }

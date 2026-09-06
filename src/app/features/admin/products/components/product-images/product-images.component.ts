@@ -8,12 +8,9 @@ import { ButtonModule } from 'primeng/button';
 
 import { LucideImage, LucideCloudUpload, LucidePlus } from '@lucide/angular';
 
-import {
-  Image,
-  ProductImage,
-} from '../../pages/product-form/product-form.component';
-
 import { environment } from '../../../../../../environments/environment.development';
+import { ImageFile } from '../../../../../shared/models/media.model';
+import { ProductImage } from '../../../../../shared/models/product.model';
 
 @Component({
   selector: 'app-product-images',
@@ -100,7 +97,7 @@ export class ProductImagesComponent implements OnDestroy {
 
     incomingFiles.forEach((file) => {
       const url = URL.createObjectURL(file);
-      const image: ProductImage = file as Image;
+      const image: ProductImage = file as ImageFile;
       image.url = url;
       this.images().push(new FormControl(image as ProductImage));
     });
@@ -135,13 +132,13 @@ export class ProductImagesComponent implements OnDestroy {
     const url = URL.createObjectURL(newFile);
 
     // 3. Construct the updated image object
-    const updatedFirstImage: Image = newFile as Image;
+    const updatedFirstImage: ImageFile = newFile as ImageFile;
     updatedFirstImage.url = url;
 
     // 4. Replace index 0 with the new image
     if (this.images().length > 0) {
       //revoke old object URL to prevent memory leaks if you generated it with createObjectURL
-      const oldImage = this.images().at(0).value as Image;
+      const oldImage = this.images().at(0).value as ImageFile;
 
       if (oldImage instanceof File) {
         URL.revokeObjectURL(oldImage.url ?? '');

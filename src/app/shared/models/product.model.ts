@@ -1,7 +1,7 @@
-import { UploadedImage } from '../../features/admin/products/pages/product-form/product-form.component';
+import { ImageFile, UploadedImage } from './media.model';
 
-export interface Product {
-  id?: string;
+interface ProductBase{
+  id: string;
   name: string;
   description: string;
   sku: string;
@@ -12,11 +12,15 @@ export interface Product {
   brandId: string;
   categoryId: string;
   subCategoryId: string;
+}
+export interface Product extends ProductBase {
+  images: UploadedImage[];
+}
+export interface ProductRequest extends Omit<ProductBase, 'id'> {
   imageUploadSessionId?: string;
-  images?: UploadedImage[];
   retainedImages?: {
-    id:string;
-    displayOrder:number;
+    id: string;
+    displayOrder: number;
   }[];
 }
 
@@ -29,3 +33,5 @@ export enum ProductVisibility {
   VISIBLE = 'VISIBLE',
   HIDDEN = 'HIDDEN',
 }
+
+export type ProductImage = ImageFile | UploadedImage;

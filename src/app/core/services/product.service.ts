@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { ApiResponse } from '../../shared/models/api-responose.model';
-import { Product } from '../../shared/models/product.model';
+import { Product, ProductRequest } from '../../shared/models/product.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -14,13 +14,13 @@ export class ProductService {
 
   private readonly apiUrl = `${environment.PRODUCT_SERVICE_BASE_URL}/products`;
 
-  createProduct(request: Product): Observable<ApiResponse<Product>> {
+  createProduct(request: ProductRequest): Observable<ApiResponse<Product>> {
     return this.http.post<ApiResponse<Product>>(this.apiUrl, request);
   }
 
   updateProduct(
     productId: string,
-    request: Product,
+    request: ProductRequest,
   ): Observable<ApiResponse<Product>> {
     return this.http.put<ApiResponse<Product>>(
       `${this.apiUrl}/${productId}`,

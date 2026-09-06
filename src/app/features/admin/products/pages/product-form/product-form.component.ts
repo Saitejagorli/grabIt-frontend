@@ -1,18 +1,14 @@
 import {
-  AfterViewChecked,
   ChangeDetectionStrategy,
   Component,
   computed,
-  DoCheck,
   inject,
   input,
-  OnChanges,
   OnInit,
   signal,
 } from '@angular/core';
 
 import {
-  FormArray,
   FormControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -23,9 +19,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { finalize, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { Toast } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
 
 import { MediaService } from '../../../../../core/services/media.service';
 import { ProductService } from '../../../../../core/services/product.service';
@@ -37,36 +33,23 @@ import { ProductVisibilityComponent } from '../../components/product-visibility/
 
 import {
   FileMetaData,
+  UploadedImage,
+  ImageFile,
   UploadSessionResponse,
 } from '../../../../../shared/models/media.model';
 
 import {
   Product,
+  ProductImage,
+  ProductRequest,
   ProductStatus,
   ProductVisibility,
 } from '../../../../../shared/models/product.model';
 
-import { skuExistsValidator } from '../../validators/sku-exists.validator';
 import { priceValidator } from '../../validators/price.validator';
+import { skuExistsValidator } from '../../validators/sku-exists.validator';
 
 type ProductMode = 'create' | 'edit';
-
-export interface Image extends File {
-  url?: string;
-  displayOrder: number;
-}
-
-export interface UploadedImage {
-  id: string;
-  objectKey: string;
-  fileName: string;
-  contentType: string;
-  size: number;
-  displayOrder: number;
-}
-
-export type ProductImage = Image | UploadedImage;
-
 @Component({
   selector: 'app-product-form',
   imports: [
@@ -222,7 +205,7 @@ export class ProductFormComponent implements OnInit {
         }
         return image;
       })
-      .filter((image): image is Image => image instanceof File);
+      .filter((image): image is ImageFile => image instanceof File);
 
     /*
      * COMPLETE FLOW
@@ -287,7 +270,7 @@ export class ProductFormComponent implements OnInit {
       });
   }
 
-  private uploadImages(files: Image[]): Observable<string | null> {
+  private uploadImages(files: ImageFile[]): Observable<string | null> {
     if (files.length === 0) {
       return of(null);
     }
@@ -341,7 +324,7 @@ export class ProductFormComponent implements OnInit {
   private saveProduct(uploadSessionId: string) {
     const formValue = this.productForm.getRawValue();
 
-    const request: Product = {
+    const request: ProductRequest = {
       // Basic information
       name: formValue.basicInfo.name,
       description: formValue.basicInfo.description,

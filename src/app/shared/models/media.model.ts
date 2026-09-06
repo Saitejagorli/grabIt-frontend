@@ -24,3 +24,17 @@ export enum UploadSessionStatus {
   COMPLETED = 'COMPLETED',
   EXPIRED = 'EXPIRED'
 }
+
+export interface ImageFile extends File {
+  url?: string;
+  displayOrder: number;
+}
+
+export interface UploadedImage {
+  id: string;
+  objectKey: string;
+  fileName: string;
+  contentType: string;
+  size: number;
+  displayOrder: number;
+}
